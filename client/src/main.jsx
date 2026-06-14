@@ -4,7 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import {AppContextProvider} from './context/AppContext.jsx' // Fixed the import name here
 import { BrowserRouter } from 'react-router-dom'
-import Navbar from './components/layout/navbar.jsx'
+import Navbar from './components/layout/Navbar.jsx'
 
 createRoot(document.getElementById('root')).render(
 
