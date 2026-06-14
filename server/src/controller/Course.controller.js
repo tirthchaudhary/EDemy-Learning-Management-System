@@ -17,7 +17,7 @@ const addCourse = async (req, res) => {
         const educator = req.user.id;
 
         if (!req.file) {
-            return res.status(400).json({ success: false, message: "Course thumbnail is required" });
+            return res.status(400).json({ success: false, message: "Course thumbnail is required", error: "Course thumbnail is required" });
         }
 
         // Upload thumbnail to Cloudinary
@@ -45,7 +45,8 @@ const addCourse = async (req, res) => {
 
     }
     catch (err) {
-        res.status(500).json({ success: false, message: err.message });
+        console.error("Error in addCourse:", err);
+        res.status(500).json({ success: false, message: err.message, error: err.message });
     }
 
 }
@@ -61,7 +62,8 @@ const getEducatorCourses = async (req, res) => {
         });
     }
     catch (err) {
-        res.status(500).json({ success: false, message: err.message });
+        console.error("Error in getEducatorCourses:", err);
+        res.status(500).json({ success: false, message: err.message, error: err.message });
     }
 }
 
@@ -73,7 +75,8 @@ const getAllCourses = async (req, res) => {
             courses
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error("Error in getAllCourses:", error);
+        res.status(500).json({ success: false, message: error.message, error: error.message });
     }
 }
 
@@ -86,7 +89,8 @@ const enrolledCourses = async (req, res) => {
             courses
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error("Error in enrolledCourses:", error);
+        res.status(500).json({ success: false, message: error.message, error: error.message });
     }
 }
 
@@ -127,7 +131,8 @@ const getEducatorDashboardData = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error("Error in getEducatorDashboardData:", error);
+        res.status(500).json({ success: false, message: error.message, error: error.message });
     }
 }
 
@@ -138,16 +143,16 @@ const rateAndReviewCourse = async (req, res) => {
         const userId = req.user.id;
 
         if (!courseId || !rating || rating < 1 || rating > 5) {
-            return res.status(400).json({ success: false, message: "Invalid course ID or rating range (1-5)" });
+            return res.status(400).json({ success: false, message: "Invalid course ID or rating range (1-5)", error: "Invalid course ID or rating range (1-5)" });
         }
 
         const course = await Course.findById(courseId)
         if (!course) {
-            return res.status(404).json({ success: false, message: "Course not found" })
+            return res.status(404).json({ success: false, message: "Course not found", error: "Course not found" })
         }
 
         if (!course.enrolledStudent.includes(userId)) {
-            return res.status(403).json({ success: false, message: "Only enrolled students can rate or review this course" });
+            return res.status(403).json({ success: false, message: "Only enrolled students can rate or review this course", error: "Only enrolled students can rate or review this course" });
         }
 
         const existingReviewIndex = course.courseRatings.findIndex(
@@ -178,7 +183,8 @@ const rateAndReviewCourse = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error("Error in rateAndReviewCourse:", error);
+        res.status(500).json({ success: false, message: error.message, error: error.message });
     }
 }
 

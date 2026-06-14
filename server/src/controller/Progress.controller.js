@@ -22,7 +22,8 @@ const getUserProgress = async (req, res) => {
             completedLectures: progress.completedLectures
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error("Error in getUserProgress:", error);
+        res.status(500).json({ success: false, message: error.message, error: error.message });
     }
 };
 
@@ -48,7 +49,8 @@ const updateUserProgress = async (req, res) => {
             completedLectures: progress.completedLectures
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error("Error in updateUserProgress:", error);
+        res.status(500).json({ success: false, message: error.message, error: error.message });
     }
 };
 
@@ -62,7 +64,8 @@ const getAllUserProgress = async (req, res) => {
             progress
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error("Error in getAllUserProgress:", error);
+        res.status(500).json({ success: false, message: error.message, error: error.message });
     }
 };
 

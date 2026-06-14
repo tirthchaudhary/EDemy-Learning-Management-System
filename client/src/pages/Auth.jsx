@@ -43,7 +43,7 @@ const Auth = () => {
 
       } catch (err) {
         console.error(err);
-        toast.error(err.response?.data?.error || 'Registration failed');
+        toast.error(err.response?.data?.message || err.response?.data?.error || 'Registration failed');
       }
     } else {
       // Login flow
@@ -73,7 +73,7 @@ const Auth = () => {
         }
       } catch (err) {
         console.error(err);
-        toast.error(err.response?.data?.error || 'Login failed');
+        toast.error(err.response?.data?.message || err.response?.data?.error || 'Login failed');
       }
     }
   }

@@ -22,7 +22,7 @@ const ResetPassword = () => {
             toast.success(response.data.message || 'Password reset successful!');
             navigate('/auth/login');
         } catch (err) {
-            toast.error(err.response?.data?.error || 'Invalid or expired token');
+            toast.error(err.response?.data?.message || err.response?.data?.error || 'Invalid or expired token');
         } finally {
             setLoading(false);
         }

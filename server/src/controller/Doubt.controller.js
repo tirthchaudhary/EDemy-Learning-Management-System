@@ -17,7 +17,8 @@ const askDoubt = async (req, res) => {
 
         res.status(201).json({ success: true, message: "Doubt submitted successfully", doubt: newDoubt });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error("Error in askDoubt:", error);
+        res.status(500).json({ success: false, message: error.message, error: error.message });
     }
 }
 
@@ -32,7 +33,8 @@ const getLectureDoubts = async (req, res) => {
 
         res.status(200).json({ success: true, doubts });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error("Error in getLectureDoubts:", error);
+        res.status(500).json({ success: false, message: error.message, error: error.message });
     }
 };
 
@@ -43,7 +45,7 @@ const replyDoubt = async (req, res) => {
 
         const doubt = await Doubt.findById(doubtId);
         if (!doubt) {
-            return res.status(404).json({ success: false, message: "Doubt not found" });
+            return res.status(404).json({ success: false, message: "Doubt not found", error: "Doubt not found" });
         }
 
         doubt.replies.push({
@@ -64,7 +66,8 @@ const replyDoubt = async (req, res) => {
         res.status(200).json({ success: true, message: "Reply added", doubt: updatedDoubt });
 
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error("Error in replyDoubt:", error);
+        res.status(500).json({ success: false, message: error.message, error: error.message });
     }
 }
 
@@ -81,7 +84,8 @@ const getEducatorDoubts = async (req, res) => {
 
         res.status(200).json({ success: true, doubts });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error("Error in getEducatorDoubts:", error);
+        res.status(500).json({ success: false, message: error.message, error: error.message });
     }
 }
 

@@ -72,7 +72,8 @@ app.use((err, req, res, next) => {
     console.error("Global Error Handler Catch:", err);
     res.status(500).json({
         success: false,
-        message: err.message || "Something went wrong on the server"
+        message: err.message || "Something went wrong on the server",
+        error: err.message || "Something went wrong on the server"
     });
 });
 

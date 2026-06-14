@@ -147,7 +147,7 @@ const NewCourseForm = () => {
     }
     catch (err) {
       console.error(err);
-      toast.error(err.response?.data?.error || "Failed to create course");
+      toast.error(err.response?.data?.message || err.response?.data?.error || "Failed to create course");
     }
 
   }
