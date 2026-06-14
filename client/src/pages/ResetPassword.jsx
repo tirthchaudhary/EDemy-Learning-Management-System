@@ -18,7 +18,7 @@ const ResetPassword = () => {
 
         setLoading(true);
         try {
-            const response = await axios.post(`http://localhost:3000/auth/reset-password/${token}`, { password });
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/auth/reset-password/${token}`, { password });
             toast.success(response.data.message || 'Password reset successful!');
             navigate('/auth/login');
         } catch (err) {

@@ -60,7 +60,7 @@ const MyEnrollments = () => {
                       {/* Image Frame Wrapper */}
                       <div className="relative flex-shrink-0 w-20 sm:w-28 aspect-video rounded-xl overflow-hidden bg-slate-100 border border-slate-100 shadow-sm group-hover:scale-102 transition-transform duration-200">
                         <img
-                          src={course.courseThumbnail.startsWith('http') ? course.courseThumbnail : `http://localhost:3000/${course.courseThumbnail}`}
+                          src={course.courseThumbnail.startsWith('http') ? course.courseThumbnail : `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/${course.courseThumbnail}`}
                           alt={course.courseTitle}
                           className="w-full h-full object-cover"
                         />

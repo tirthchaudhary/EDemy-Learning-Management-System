@@ -59,7 +59,7 @@ const Account = () => {
     setIsSaving(true)
     try {
       const token = localStorage.getItem('token')
-      const response = await axios.post('http://localhost:3000/auth/update-profile', {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/auth/update-profile`, {
         name: profile.name,
         imageUrl: profile.imageUrl
       }, {
@@ -101,7 +101,7 @@ const Account = () => {
     try {
       const token = localStorage.getItem('token')
 
-      const response = await axios.post('http://localhost:3000/auth/change-password', { currentPassword: passwords.current, newPassword: passwords.new }, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/auth/change-password`, { currentPassword: passwords.current, newPassword: passwords.new }, {
         headers: { Authorization: `Bearer ${token}` }
       })
 

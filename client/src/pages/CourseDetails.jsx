@@ -56,7 +56,7 @@ const CourseDetails = () => {
     try {
       const token = localStorage.getItem('token');
       const orderResponse = await axios.post(
-        'http://localhost:3000/api/payment/create-order',
+        `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/api/payment/create-order`,
         { courseId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -78,7 +78,7 @@ const CourseDetails = () => {
         handler: async function (response) {
           try {
             const verifyResponse = await axios.post(
-              'http://localhost:3000/api/payment/verify-payment',
+              `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/api/payment/verify-payment`,
               {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,

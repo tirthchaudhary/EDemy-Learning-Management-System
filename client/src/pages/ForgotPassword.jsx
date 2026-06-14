@@ -11,7 +11,7 @@ const ForgotPassword = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await axios.post('http://localhost:3000/auth/forgot-password', { email });
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/auth/forgot-password`, { email });
             toast.success(response.data.message || 'Reset link sent to your email!');
             setEmail('');
         } catch (err) {

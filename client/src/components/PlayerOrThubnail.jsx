@@ -5,7 +5,7 @@ const PlayerOrThumbnail = ({ playerData, CourseData }) => {
   // Prepend backend URL if the thumbnail is a local file path
   const thumbnailUrl = CourseData.courseThumbnail.startsWith('http')
     ? CourseData.courseThumbnail
-    : `http://localhost:3000/${CourseData.courseThumbnail}`;
+    : `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/${CourseData.courseThumbnail}`;
 
   return playerData
     ? <Youtube

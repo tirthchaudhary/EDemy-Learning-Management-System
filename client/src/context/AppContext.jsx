@@ -34,7 +34,7 @@ export const AppContextProvider = (props) => {
     // Fetch All courses
     const fetchAllCourses = async (req, res) => {
         try {
-            const response = await axios.get('http://localhost:3000/courses');
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/courses`);
             if (response.data.success) {
                 setAllCourses(response.data.courses);
             }
@@ -47,7 +47,7 @@ export const AppContextProvider = (props) => {
         const token = localStorage.getItem('token');
         if (!token) return;
         try {
-            const response = await axios.get('http://localhost:3000/courses/progress', {
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/courses/progress`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.data.success) {
@@ -63,7 +63,7 @@ export const AppContextProvider = (props) => {
         const token = localStorage.getItem('token');
         if (!token) return;
         try {
-            const response = await axios.post('http://localhost:3000/courses/progress/update',
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/courses/progress/update`,
                 { courseId, lectureId, completed },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -134,7 +134,7 @@ export const AppContextProvider = (props) => {
             return;
         }
         try {
-            const response = await axios.get('http://localhost:3000/courses/enrolled', {
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/courses/enrolled`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -165,7 +165,7 @@ export const AppContextProvider = (props) => {
         const token = localStorage.getItem('token');
         if (!token) throw new Error("No authentication token found");
         try {
-            const response = await axios.post('http://localhost:3000/courses/rate', { courseId, rating, comment }, { headers: { Authorization: `Bearer ${token}` } });
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/courses/rate`, { courseId, rating, comment }, { headers: { Authorization: `Bearer ${token}` } });
 
             if (response.data.success) {
                 setAllCourses(prev =>

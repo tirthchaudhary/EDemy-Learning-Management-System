@@ -30,7 +30,7 @@ export default function Doubt({ courseId, lectureId, lectureTitle }) {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.post(
-                'http://localhost:3000/courses/doubts/create',
+                `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/courses/doubts/create`,
                 {
                     courseId,
                     lectureId,

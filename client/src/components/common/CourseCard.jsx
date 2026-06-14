@@ -11,7 +11,7 @@ const CourseCard = ({ course }) => {
   const originalPrice = course.coursePrice.toFixed(2)
   const thumbnailUrl = course.courseThumbnail.startsWith('http')
     ? course.courseThumbnail
-    : `http://localhost:3000/${course.courseThumbnail}`;
+    : `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/${course.courseThumbnail}`;
 
   return (
     <Link

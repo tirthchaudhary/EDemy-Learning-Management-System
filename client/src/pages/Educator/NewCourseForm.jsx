@@ -127,7 +127,7 @@ const NewCourseForm = () => {
 
       const token = localStorage.getItem('token');
 
-      const response = await axios.post("http://localhost:3000/courses/create", formData, { headers: { Authorization: `Bearer ${token}` } });
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/courses/create`, formData, { headers: { Authorization: `Bearer ${token}` } });
       toast.success(response.data.message);
 
       console.log("Submitting Course:", {

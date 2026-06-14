@@ -14,7 +14,7 @@ const StudentsEnrolled = () => {
     const fetchEnrolledStudents = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3000/courses/educator-dashboard', { headers: { Authorization: `Bearer ${token}` } })
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/courses/educator-dashboard`, { headers: { Authorization: `Bearer ${token}` } })
         if (response.data.success) {
           setEnrolledStudents(response.data.enrolledStudents || []);
         }

@@ -281,7 +281,7 @@ const Player = () => {
                   {courseData?.courseThumbnail ? (
                     <>
                       <img
-                        src={courseData.courseThumbnail.startsWith('http') ? courseData.courseThumbnail : `http://localhost:3000/${courseData.courseThumbnail}`}
+                        src={courseData.courseThumbnail.startsWith('http') ? courseData.courseThumbnail : `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/${courseData.courseThumbnail}`}
                         alt="Course Display Frame"
                         className="w-full h-full object-cover opacity-35 transition-transform duration-500 group-hover:scale-102"
                       />

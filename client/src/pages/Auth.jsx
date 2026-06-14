@@ -17,7 +17,7 @@ const Auth = () => {
     e.preventDefault();
     if (state === 'register') {
       try {
-        const response = await axios.post('http://localhost:3000/auth/register', {
+        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/auth/register`, {
           name,
           email,
           password,
@@ -48,7 +48,7 @@ const Auth = () => {
     } else {
       // Login flow
       try {
-        const response = await axios.post('http://localhost:3000/auth/login', {
+        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/auth/login`, {
           email,
           password
         }, { withCredentials: true });

@@ -9,7 +9,7 @@ const MyCourses = () => {
     const fetchCourses = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3000/courses/educator', {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/courses/educator`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
