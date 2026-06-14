@@ -1,6 +1,14 @@
 const Course = require("../model/Course.model");
 const Transaction = require("../model/Transaction.model");
 
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 const addCourse = async (req, res) => {
 
     try {
@@ -12,7 +20,12 @@ const addCourse = async (req, res) => {
             return res.status(400).json({ success: false, message: "Course thumbnail is required" });
         }
 
-        const courseThumbnail = req.file.path.replace(/\\/g, '/'); // replace backslashes with forward slashes to save in mongoDB
+        // Upload thumbnail to Cloudinary
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'edemy_thumbnails'
+        });
+
+        const courseThumbnail = result.secure_url;
 
         const chapters = JSON.parse(req.body.chapters);
 
