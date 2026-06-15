@@ -165,4 +165,46 @@ const handleRazorpayWebhook = async (req, res) => {
 };
 
 
-module.exports = { createOrder, verifyPayment, handleRazorpayWebhook };
+const testRazorpay = async (req, res) => {
+    try {
+        const keyId = process.env.RAZORPAY_KEY_ID;
+        const keySecret = process.env.RAZORPAY_KEY_SECRET;
+
+        if (!keyId || !keySecret) {
+            return res.status(400).json({
+                success: false,
+                message: "Razorpay environment variables are missing on this server",
+                key_id_exists: !!keyId,
+                key_secret_exists: !!keySecret
+            });
+        }
+
+        const razorpay = new Razorpay({
+            key_id: keyId,
+            key_secret: keySecret
+        });
+
+        const order = await razorpay.orders.create({
+            amount: 100, // 1 INR
+            currency: 'INR',
+            receipt: `test_receipt_${Date.now()}`
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Razorpay connection successful on this server",
+            orderId: order.id,
+            key_id_mask: keyId.substring(0, 8) + '...'
+        });
+    } catch (error) {
+        console.error("Test Razorpay Error:", error);
+        res.status(500).json({
+            success: false,
+            message: error.message,
+            key_id_exists: !!process.env.RAZORPAY_KEY_ID,
+            key_secret_exists: !!process.env.RAZORPAY_KEY_SECRET
+        });
+    }
+};
+
+module.exports = { createOrder, verifyPayment, handleRazorpayWebhook, testRazorpay };

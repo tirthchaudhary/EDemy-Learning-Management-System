@@ -20,12 +20,23 @@ const addCourse = async (req, res) => {
             return res.status(400).json({ success: false, message: "Course thumbnail is required", error: "Course thumbnail is required" });
         }
 
-        // Upload thumbnail to Cloudinary
-        const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: 'edemy_thumbnails'
-        });
+        // Upload thumbnail to Cloudinary with fallback to local storage
+        let courseThumbnail;
+        try {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'edemy_thumbnails'
+            });
+            courseThumbnail = result.secure_url;
 
-        const courseThumbnail = result.secure_url;
+            // Delete local file after successful upload to Cloudinary
+            const fs = require('fs');
+            if (fs.existsSync(req.file.path)) {
+                fs.unlinkSync(req.file.path);
+            }
+        } catch (cloudinaryError) {
+            console.error("Cloudinary upload failed, falling back to local file storage:", cloudinaryError);
+            courseThumbnail = "uploads/" + req.file.filename;
+        }
 
         const chapters = JSON.parse(req.body.chapters);
 
