@@ -45,7 +45,7 @@ export default function StudentDoubts() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(`http://localhost:3000/courses/doubts/reply/${doubtId}`, { replyText }, { headers: { Authorization: `Bearer ${token}` } });
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/courses/doubts/reply/${doubtId}`, { replyText }, { headers: { Authorization: `Bearer ${token}` } });
 
       if (response.data.success) {
         setReplyInputs(prev => ({ ...prev, [doubtId]: '' }));
