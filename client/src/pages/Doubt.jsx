@@ -113,7 +113,7 @@ export default function Doubt({ courseId, lectureId, lectureTitle }) {
                             {/* Question card */}
                             <div className="flex items-start gap-3">
                                 <img
-                                    src={doubt.user?.imageUrl}
+                                    src={doubt.user?.imageUrl || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'}
                                     alt={doubt.user?.name}
                                     className="w-9 h-9 rounded-full object-cover border border-slate-100 shadow-xxs"
                                     onError={(e) => {
@@ -135,7 +135,7 @@ export default function Doubt({ courseId, lectureId, lectureTitle }) {
                                     {doubt.replies.map((reply) => (
                                         <div key={reply._id} className="flex items-start gap-2.5">
                                             <img
-                                                src={reply.user?.imageUrl}
+                                                src={reply.user?.imageUrl || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'}
                                                 alt={reply.user?.name}
                                                 className="w-7 h-7 rounded-full object-cover border border-slate-100"
                                                 onError={(e) => {

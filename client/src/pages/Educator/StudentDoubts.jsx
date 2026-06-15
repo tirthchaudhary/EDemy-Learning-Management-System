@@ -272,7 +272,7 @@ export default function StudentDoubts() {
                 {/* Question Details card */}
                 <div className="flex items-start gap-4">
                   <img
-                    src={doubt.user.imageUrl}
+                    src={doubt.user.imageUrl || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'}
                     alt={doubt.user.name}
                     className="w-10 h-10 rounded-full object-cover border shadow-sm shrink-0"
                     onError={(e) => {
@@ -302,7 +302,7 @@ export default function StudentDoubts() {
                     {doubt.replies.map((reply) => (
                       <div key={reply._id} className="flex items-start gap-3">
                         <img
-                          src={reply.user.imageUrl}
+                          src={reply.user.imageUrl || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'}
                           alt={reply.user.name}
                           className="w-8 h-8 rounded-full object-cover border shadow-xxs shrink-0"
                           onError={(e) => {
