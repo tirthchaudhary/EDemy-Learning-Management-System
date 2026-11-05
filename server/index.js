@@ -10,7 +10,7 @@ const { getUserProgress, updateUserProgress, getAllUserProgress } = require('./s
 const { askDoubt, getLectureDoubts, replyDoubt, getEducatorDoubts } = require('./src/controller/Doubt.controller.js');
 const paymentRoutes = require('./src/route/Payment.route.js');
 const Course = require('./src/model/Course.model.js');
-const path = require('path')
+const path = require('path');
 const { upload } = require('./src/middleware/multerMiddleware.js');
 const cookieParser = require('cookie-parser');
 const app = express();
@@ -25,7 +25,6 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
-
 connectDB();
 
 app.post('/auth/register', registerUser);
@@ -34,7 +33,6 @@ app.post('/auth/update-profile', AuthMiddleware, updateUserProfile);
 app.post('/auth/change-password', AuthMiddleware, changePassword);
 app.post('/auth/forgot-password', forgotPassword);
 app.post('/auth/reset-password/:token', resetPassword);
-
 
 app.post('/courses/create', AuthMiddleware, isEducator, upload.single("courseThumbnail"), addCourse);
 
@@ -60,12 +58,9 @@ app.get('/courses/doubts/:courseId/:lectureId', AuthMiddleware, getLectureDoubts
 app.post('/courses/doubts/reply/:doubtId', AuthMiddleware, replyDoubt);
 app.get('/courses/doubts/educator', AuthMiddleware, isEducator, getEducatorDoubts);
 
-
 app.get('/', (req, res) => {
     res.send("Hello World");
 });
-
-
 
 // Global Error Handler Middleware
 app.use((err, req, res, next) => {
@@ -77,6 +72,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
