@@ -209,7 +209,7 @@ const NewCourseForm = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Base Price ($)</label>
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Base Price (₹)</label>
                 <input
                   type="number"
                   step="0.01"

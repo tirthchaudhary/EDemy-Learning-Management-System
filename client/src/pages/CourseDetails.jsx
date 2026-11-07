@@ -10,6 +10,7 @@ import PlayerOrThumbnail from '../components/PlayerOrThubnail.jsx';
 import axios from 'axios';
 import { loadRazorpayScript } from '../utils/loadScript';
 import { getYouTubeId } from '../utils/youtube.js';
+import CourseNotes from '../components/common/CourseNotes.jsx';
 import { toast } from 'react-hot-toast';
 
 const CourseDetails = () => {
@@ -18,9 +19,15 @@ const CourseDetails = () => {
   const [courseData, setCourseData] = useState(null);
   const [openSection, setOpenSection] = useState({});
   const [isEnrolled, setIsEnrolled] = useState(false);
-  const { allCourses, calculateRating, calculateChapterTime, calculateCourseDuration, calculateNoOfLectures, enrolledCourses, fetchUserEnrolledCourses, navigate, isLoggedIn } = useContext(AppContext)
+  const { allCourses, calculateRating, calculateChapterTime, calculateCourseDuration, calculateNoOfLectures, enrolledCourses, fetchUserEnrolledCourses, navigate, isLoggedIn, userData } = useContext(AppContext)
   const [playerData, setPlayerData] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+
+  const isEducatorOwner = Boolean(
+    userData &&
+    courseData &&
+    ((userData._id || userData.id) === (courseData.educator?._id || courseData.educator))
+  );
 
   const fetchCourseData = async () => {
     const findCourse = allCourses.find(course => course._id.toString() === id.toString());
@@ -63,6 +70,14 @@ const CourseDetails = () => {
 
       if (!orderResponse.data.success) {
         toast.error("Error creating payment order");
+        return;
+      }
+
+      // If course is free or student is already enrolled, bypass payment
+      if (orderResponse.data.isFree || orderResponse.data.isAlreadyEnrolled) {
+        toast.success(orderResponse.data.message || "Enrolled successfully!");
+        await fetchUserEnrolledCourses();
+        navigate('/player/' + courseId);
         return;
       }
 
@@ -241,10 +256,16 @@ const CourseDetails = () => {
                   </div>
 
                   <button
-                    onClick={() => isEnrolled ? navigate('/my-enrollments') : handleEnrollment(courseData._id)}
+                    onClick={() => {
+                      if (isEducatorOwner || isEnrolled) {
+                        navigate('/player/' + courseData._id);
+                      } else {
+                        handleEnrollment(courseData._id);
+                      }
+                    }}
                     className='w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition-colors duration-200 shadow-md shadow-indigo-200 cursor-pointer'
                   >
-                    {isEnrolled ? 'Go to Course' : 'Enroll Now'}
+                    {isEducatorOwner ? 'Open in Course Player' : (isEnrolled ? 'Go to Course' : 'Enroll Now')}
                   </button>
 
                   {/* Includes */}
@@ -289,10 +310,16 @@ const CourseDetails = () => {
                     <span className='text-green-600 text-sm font-medium'>{courseData.discount}% off</span>
                   </div>
                   <button
-                    onClick={() => isEnrolled ? navigate('/my-enrollments') : handleEnrollment(courseData._id)}
+                    onClick={() => {
+                      if (isEducatorOwner || isEnrolled) {
+                        navigate('/player/' + courseData._id);
+                      } else {
+                        handleEnrollment(courseData._id);
+                      }
+                    }}
                     className='w-full py-3 rounded-xl bg-indigo-600 text-white font-semibold text-sm cursor-pointer'
                   >
-                    {isEnrolled ? 'Go to Course' : 'Enroll Now'}
+                    {isEducatorOwner ? 'Open in Course Player' : (isEnrolled ? 'Go to Course' : 'Enroll Now')}
                   </button>
                 </div>
               </div>
@@ -348,6 +375,14 @@ const CourseDetails = () => {
                     </div>
                   ))}
                 </div>
+              </div>
+
+              {/* Course Notes & Resources Section */}
+              <div className='mb-6'>
+                <CourseNotes
+                  courseId={courseData?._id}
+                  educatorId={courseData?.educator?._id || courseData?.educator}
+                />
               </div>
 
               {/* Description */}

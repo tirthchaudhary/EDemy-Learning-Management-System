@@ -8,6 +8,7 @@ const { isEducator } = require('./src/middleware/isEducator.js');
 const { addCourse, getEducatorCourses, getAllCourses, enrolledCourses, getEducatorDashboardData, rateAndReviewCourse } = require('./src/controller/Course.controller.js');
 const { getUserProgress, updateUserProgress, getAllUserProgress } = require('./src/controller/Progress.controller.js');
 const { askDoubt, getLectureDoubts, replyDoubt, getEducatorDoubts } = require('./src/controller/Doubt.controller.js');
+const { uploadNote, getCourseNotes, deleteNote, downloadNote } = require('./src/controller/Note.controller.js');
 const paymentRoutes = require('./src/route/Payment.route.js');
 const Course = require('./src/model/Course.model.js');
 const path = require('path');
@@ -39,6 +40,12 @@ app.post('/courses/create', AuthMiddleware, isEducator, upload.single("courseThu
 app.get('/courses/educator', AuthMiddleware, isEducator, getEducatorCourses);
 app.get('/courses/enrolled', AuthMiddleware, enrolledCourses);
 app.get('/courses', getAllCourses);
+
+// Notes Routes
+app.post('/courses/notes/upload', AuthMiddleware, isEducator, upload.single("noteFile"), uploadNote);
+app.get('/courses/notes/:courseId', getCourseNotes);
+app.get('/courses/notes/download/:noteId', downloadNote);
+app.delete('/courses/notes/:noteId', AuthMiddleware, isEducator, deleteNote);
 
 app.use('/api/payment', paymentRoutes);
 

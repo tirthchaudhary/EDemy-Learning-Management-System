@@ -18,16 +18,48 @@ const getRazorpayInstance = () => {
 const createOrder = async (req, res) => {
     try {
         const { courseId } = req.body;
-        const userId = req.user.id;
+        const userId = req.user?.id || req.user?._id;
 
         const course = await Course.findById(courseId);
         if (!course) {
             return res.status(404).json({ success: false, message: "Course not found" });
         }
 
+        // Check if student is already enrolled
+        if (course.enrolledStudent.some(id => id.toString() === userId.toString())) {
+            return res.status(200).json({
+                success: true,
+                isAlreadyEnrolled: true,
+                message: "You are already enrolled in this course!"
+            });
+        }
+
         // Calculate discounted price
         const discount = course.discount || 0;
         const finalPrice = Math.round(course.coursePrice * (1 - (discount / 100)));
+
+        // Handle Free Course (Price is 0 or 100% discount)
+        if (finalPrice <= 0) {
+            course.enrolledStudent.push(userId);
+            await course.save();
+
+            // Record free transaction
+            await Transaction.create({
+                user: userId,
+                course: courseId,
+                amount: 0,
+                paymentId: 'free_enrollment',
+                orderId: `free_${Date.now()}`,
+                status: 'success'
+            });
+
+            return res.status(200).json({
+                success: true,
+                isFree: true,
+                message: "Enrolled in free course successfully!"
+            });
+        }
+
         const amountInPaise = finalPrice * 100;
 
         const options = {
@@ -59,7 +91,8 @@ const createOrder = async (req, res) => {
 
     } catch (error) {
         console.error("Create Order Error:", error);
-        res.status(500).json({ success: false, message: error.message });
+        const errMsg = error.error?.description || error.description || error.message || "Failed to create payment order";
+        res.status(500).json({ success: false, message: errMsg });
     }
 };
 
@@ -67,7 +100,7 @@ const createOrder = async (req, res) => {
 const verifyPayment = async (req, res) => {
     try {
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature, courseId } = req.body;
-        const userId = req.user.id;
+        const userId = req.user?.id || req.user?._id;
 
         if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !courseId) {
             return res.status(400).json({ success: false, message: "Missing required payment fields" });

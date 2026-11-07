@@ -9,10 +9,10 @@ import Rating from '../components/common/Rating.jsx'
 import Doubt from './Doubt.jsx'
 import { getYouTubeId } from '../utils/youtube.js'
 import { toast } from 'react-hot-toast';
-
+import CourseNotes from '../components/common/CourseNotes.jsx';
 
 const Player = () => {
-  const { enrolledCourses, calculateChapterTime, courseProgress, toggleLectureProgress, userData, rateCourse } = useContext(AppContext)
+  const { enrolledCourses, allCourses, calculateChapterTime, courseProgress, toggleLectureProgress, userData, rateCourse } = useContext(AppContext)
   const { courseId } = useParams()
   const [courseData, setCourseData] = useState(null)
   const [openSection, setOpenSection] = useState({})
@@ -20,9 +20,12 @@ const Player = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
-  // Optimization: using .find() is faster and cleaner than running a full .map() loop
+  // Find course from enrolled courses or global courses catalog (for educators)
   const getCourseData = () => {
-    const matchedCourse = enrolledCourses.find(course => course._id.toString() === courseId.toString())
+    let matchedCourse = enrolledCourses.find(course => course._id.toString() === courseId.toString())
+    if (!matchedCourse && allCourses) {
+      matchedCourse = allCourses.find(course => course._id.toString() === courseId.toString())
+    }
     setCourseData(matchedCourse || null)
   }
 
@@ -73,7 +76,7 @@ const Player = () => {
 
   useEffect(() => {
     getCourseData()
-  }, [enrolledCourses, courseId])
+  }, [enrolledCourses, allCourses, courseId])
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-between font-sans text-slate-800">
@@ -171,11 +174,17 @@ const Player = () => {
               </div>
             </div>
 
+            {/* Course Notes & Resources */}
+            <CourseNotes
+              courseId={courseId}
+              educatorId={courseData?.educator?._id || courseData?.educator}
+            />
+
             {/* DYNAMIC DOUBT DISCUSSIONS BOARD */}
             {playerData && (
-              <Doubt 
-                courseId={courseId} 
-                lectureId={playerData.lectureId} 
+              <Doubt
+                courseId={courseId}
+                lectureId={playerData.lectureId}
                 lectureTitle={playerData.lectureTitle}
               />
             )}

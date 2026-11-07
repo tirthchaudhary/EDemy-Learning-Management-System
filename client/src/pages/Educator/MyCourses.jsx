@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 const MyCourses = () => {
   const [courses, setCourses] = useState([])
@@ -54,42 +55,51 @@ const MyCourses = () => {
               ? course.courseThumbnail
               : `http://localhost:3000/${course.courseThumbnail}`;
             return (
-              <div
+              <Link
+                to={`/course/${course._id}`}
                 key={course._id}
-                className="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
+                className="group block bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-indigo-200 transition-all duration-300"
               >
                 {/* Course Image */}
                 <div className="aspect-video w-full overflow-hidden bg-slate-100 relative">
                   <img
                     src={thumbnailUrl}
                     alt={course.courseTitle}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   {course.discount > 0 && (
                     <span className="absolute top-2.5 left-2.5 bg-indigo-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
                       {course.discount}% OFF
                     </span>
                   )}
+                  <span className="absolute bottom-2.5 right-2.5 bg-slate-900/80 backdrop-blur-xs text-white text-[10px] font-semibold px-2 py-0.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
+                    View Course Details &rarr;
+                  </span>
                 </div>
 
                 {/* Course Details */}
                 <div className="p-4 space-y-3">
-                  <h3 className="font-bold text-slate-800 text-sm line-clamp-2 min-h-[40px]">
+                  <h3 className="font-bold text-slate-800 text-sm line-clamp-2 min-h-[40px] group-hover:text-indigo-600 transition-colors">
                     {course.courseTitle}
                   </h3>
 
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-base font-bold text-indigo-600">
-                      ${discountedPrice}
-                    </span>
-                    {course.discount > 0 && (
-                      <span className="text-xs text-slate-400 line-through">
-                        ${course.coursePrice.toFixed(2)}
+                  <div className="flex items-baseline justify-between">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-base font-bold text-indigo-600">
+                        ₹{discountedPrice}
                       </span>
-                    )}
+                      {course.discount > 0 && (
+                        <span className="text-xs text-slate-400 line-through">
+                          ₹{course.coursePrice.toFixed(2)}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                      Open &rarr;
+                    </span>
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
